@@ -16,11 +16,16 @@ jobs:
         with:
           java-version: 21
           distribution: 'adopt'
-      - name: Gradle Test
-        run: ./gradlew build
-      - name: Upload Build Artifact
-        uses: actions/upload-artifact@v4
+
+      - name: Build plugin with custom spigot task
+        run: ./gradlew spigot
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
         with:
-          name: build-artifact
-          path: target/*.jar
+          name: Release ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          files: spigot/plugins/Rankup.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
